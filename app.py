@@ -64,18 +64,6 @@ def add_response():
     if len(comment) > 300:
         return jsonify({"error": "Comment is too long (max 300 characters)."}), 400
 
-    conn = get_conn()
-    try:
-        with conn.cursor() as cur:
-            cur.execute(
-                "INSERT INTO survey_responses (name, language, rating, comment) "
-                "VALUES (%s, %s, %s, %s)",
-                (name, language, rating, comment),
-            )
-        conn.commit()
-    finally:
-        conn.close()
-
      @app.get("/api/health")
 def health():
     url = os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_URL")
@@ -90,5 +78,17 @@ def health():
         return jsonify({"env": True, "connected": True, "table": table})
     except Exception as e:
         return jsonify({"env": True, "connected": False, "error": type(e).__name__})
+
+    conn = get_conn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO survey_responses (name, language, rating, comment) "
+                "VALUES (%s, %s, %s, %s)",
+                (name, language, rating, comment),
+            )
+        conn.commit()
+    finally:
+        conn.close()
     
     return jsonify({"ok": True}), 201
