@@ -49,22 +49,7 @@ def add_response():
     name = str(data.get("name", "")).strip()
     language = str(data.get("language", "")).strip()
     comment = str(data.get("comment", "")).strip()
-
-    @app.get("/api/health")
-def health():
-    url = os.environ.get("DATABASE_URL") or os.environ.get("POSTGRES_URL")
-    if not url:
-        return jsonify({"env": False})
-    try:
-        conn = get_conn()
-        with conn.cursor() as cur:
-            cur.execute("SELECT to_regclass('public.survey_responses')")
-            table = cur.fetchone()[0]
-        conn.close()
-        return jsonify({"env": True, "connected": True, "table": table})
-    except Exception as e:
-        return jsonify({"env": True, "connected": False, "error": type(e).__name__})
-
+    
     try:
         rating = int(data.get("rating"))
     except (TypeError, ValueError):
