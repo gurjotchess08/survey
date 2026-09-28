@@ -1,8 +1,0 @@
-CREATE TABLE IF NOT EXISTS survey_responses (
-  id SERIAL PRIMARY KEY,
-  name TEXT NOT NULL,
-  language TEXT NOT NULL,
-  rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
-  comment TEXT NOT NULL DEFAULT '',
-  created_at TIMESTAMP NOT NULL DEFAULT NOW()
-);
